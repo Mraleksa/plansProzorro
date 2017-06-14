@@ -5,12 +5,19 @@ var d3 = require("d3");
 
 // Open a database handle
 var db = new sqlite3.Database("data.sqlite");
-
-	
-var currentCount =  "2017-03-25T00:00:00.008329+03:00"
 var p=0; var p2=0;
-   
-   
+
+
+
+var currentCount =  "2017-01-01T00:00:00.008329+03:00"
+
+//db.each("SELECT dateModified FROM data ORDER BY dateModified DESC LIMIT 1", function(err, timeStart) {
+      
+	//var currentCount = timeStart.dateModified
+	console.log("старт: "+currentCount); 
+	//var end  = formatTime(new Date());
+	//console.log("конец: "+end);
+
 function piv(){  
 p++;
 client.request({url: 'https://public.api.openprocurement.org/api/2.3/plans?offset='+currentCount})
@@ -31,24 +38,29 @@ client.request({url: 'https://public.api.openprocurement.org/api/2.3/plans?offse
 				client.request({url: 'https://public.api.openprocurement.org/api/0/plans/'+item.id})
 					.then(function (data) {
 			
-				
-					
+
+
+if(data.getJSON().data.budget.year =="2017"){
+	
+	
 db.serialize(function() {
 
   // Create new table
-  db.run("CREATE TABLE IF NOT EXISTS data (id TEXT,datePublished TEXT,cpv TEXT,nameId TEXT,name TEXT,amount INT,currency TEXT,procurementMethod TEXT,procurementMethodType TEXT,startDate TEXT)");
+  db.run("CREATE TABLE IF NOT EXISTS data (id TEXT,dateModified TEXT,nameId TEXT,name TEXT,amount INT,currency TEXT,procurementMethod TEXT,datePublished TEXT)");
 
   
   // Insert a new record
-  var statement = db.prepare("INSERT INTO data VALUES (?,?,?,?,?,?,?,?,?,?)");
+  var statement = db.prepare("INSERT INTO data VALUES (?,?,?,?,?,?,?,?)");
 
-statement.run(data.getJSON().data.id,data.getJSON().data.datePublished,data.getJSON().data.classification.id,data.getJSON().data.procuringEntity.identifier.id,data.getJSON().data.procuringEntity.name,data.getJSON().data.budget.amount,data.getJSON().data.budget.currency,data.getJSON().data.tender.procurementMethod,data.getJSON().data.tender.procurementMethodType,data.getJSON().data.tender.tenderPeriod.startDate);
+statement.run(item.id,item.dateModified,data.getJSON().data.procuringEntity.identifier.id,data.getJSON().data.procuringEntity.name,data.getJSON().data.budget.amount,data.getJSON().data.budget.currency,data.getJSON().data.tender.procurementMethod,data.getJSON().data.datePublished);
   //else none;
    //console.log(item.dateModified)
   statement.finalize();
 });
 
-					})
+}//year
+				
+				})
 					.catch(function  (error) {
 						console.log("error_detale")
 						
@@ -65,18 +77,19 @@ statement.run(data.getJSON().data.id,data.getJSON().data.datePublished,data.getJ
 				console.log(p2)
 			setTimeout(function() {
 			
-				if (p2 < 1) {
+				if (p2 < 10) {
 					piv ();
 				}
 				else {
 					
 ///////////////////////////////		
 
-db.run("DELETE FROM data2");					
+					
+//db.run("DELETE FROM data2");					
 						
 const exporter = sqliteJSON(db);
 					
-exporter.json('SELECT * FROM data', function (err, json) {
+exporter.json('SELECT name,procurementMethod FROM data', function (err, json) {
 						
 						var nest=d3.nest()
   						  .key(function(d) {return d.name;})
@@ -148,4 +161,4 @@ else {
 
 piv ();	
  
-   
+//});
