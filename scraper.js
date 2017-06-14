@@ -9,11 +9,11 @@ var p=0; var p2=0;
 
 
 
-var currentCount =  "2017-01-01T00:00:00.008329+03:00"
+//var currentCount =  "2017-01-01T00:00:00.008329+03:00"
 
-//db.each("SELECT dateModified FROM data ORDER BY dateModified DESC LIMIT 1", function(err, timeStart) {
+db.each("SELECT dateModified FROM data ORDER BY dateModified DESC LIMIT 1", function(err, timeStart) {
       
-	//var currentCount = timeStart.dateModified
+	var currentCount = timeStart.dateModified
 	console.log("старт: "+currentCount); 
 	//var end  = formatTime(new Date());
 	//console.log("конец: "+end);
@@ -77,7 +77,7 @@ statement.run(item.id,item.dateModified,data.getJSON().data.procuringEntity.iden
 				console.log(p2)
 			setTimeout(function() {
 			
-				if (p2 < 10) {
+				if (p2 < 100) {
 					piv ();
 				}
 				else {
@@ -85,7 +85,7 @@ statement.run(item.id,item.dateModified,data.getJSON().data.procuringEntity.iden
 ///////////////////////////////		
 
 					
-//db.run("DELETE FROM data2");					
+db.run("DELETE FROM data2");					
 						
 const exporter = sqliteJSON(db);
 					
@@ -161,4 +161,4 @@ else {
 
 piv ();	
  
-//});
+});
