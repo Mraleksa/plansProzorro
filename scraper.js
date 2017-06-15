@@ -144,8 +144,8 @@ var nest1=d3.nest()
 	totalOpen: d3.sum(v, function(d) { return d.totalOpen; })
 }; })
 .entries(JSON.parse(json1));
-	
-	nest1.forEach(function(item) {
+console.log(JSON.stringify(nest1))	
+nest1.forEach(function(item) {
 	
 //db.run("DELETE FROM data_nest2");
 	
