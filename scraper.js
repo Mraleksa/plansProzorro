@@ -130,7 +130,7 @@ statement.finalize();
 					
 
 	
-/*
+
 	
 exporter.json('SELECT * FROM data_nest1', function (err, json1) {
 var nest1=d3.nest()
@@ -145,10 +145,23 @@ var nest1=d3.nest()
 }; })
 .entries(JSON.parse(json1));
 	
-	console.log(JSON.stringify(nest1))
+	nest1.forEach(function(item) {
 	
-})	
-*/			
+//db.run("DELETE FROM data_nest2");
+	
+db.serialize(function() {
+db.run("CREATE TABLE IF NOT EXISTS data_nest2 (item TEXT,countNo INT,countOpen INT,totalNo INT,totalOpen INT)");
+var statement = db.prepare("INSERT INTO data_nest2 VALUES (?,?,?,?,?)");
+statement.run(item.key,item.values[0].value.count,item.values[1].value.count,item.values[0].value.total,item.values[1].value.total);
+statement.finalize();
+});//db
+
+	
+	
+})//nest		
+	
+})//exporter2	
+			
 	
 					
 					
