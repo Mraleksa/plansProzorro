@@ -86,7 +86,6 @@ exporter.json('SELECT name,procurementMethod,amount FROM data', function (err, j
 var nest=d3.nest()
  .key(function(d) {return d.name;})
 .key(function(d) {return d.procurementMethod;})
-.sortKeys(d3.ascending)
 .rollup(function(v) { return {
 	count: v.length, 
 	total: d3.sum(v, function(d) { return d.amount; })
@@ -135,8 +134,6 @@ statement.finalize();
 exporter.json('SELECT * FROM data_nest1', function (err, json1) {
 var nest1=d3.nest()
  .key(function(d) {return d.item;})
-.key(function(d) {return d.procurementMethod;})
-.sortKeys(d3.ascending)
 .rollup(function(v) { return {
 	countNo: d3.sum(v, function(d) { return d.countNo; }),
 	countOpen: d3.sum(v, function(d) { return d.countOpen; }),
