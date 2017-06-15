@@ -124,6 +124,14 @@ statement.finalize();
 	
 })//nest						
 
+						
+});//exporter		
+
+					
+
+	
+/*
+	
 exporter.json('SELECT * FROM data_nest1', function (err, json1) {
 var nest1=d3.nest()
  .key(function(d) {return d.item;})
@@ -140,15 +148,7 @@ var nest1=d3.nest()
 	console.log(JSON.stringify(nest1))
 	
 })	
-
-						
-});//exporter		
-
-					
-
-	
-
-				
+*/			
 	
 					
 					
