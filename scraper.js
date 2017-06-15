@@ -152,7 +152,7 @@ var nest1=d3.nest()
 db.serialize(function() {
 db.run("CREATE TABLE IF NOT EXISTS data_nest2 (item TEXT,countNo INT,countOpen INT,totalNo INT,totalOpen INT)");
 var statement = db.prepare("INSERT INTO data_nest2 VALUES (?,?,?,?,?)");
-statement.run(item.key,item.values[0].value.count,item.values[1].value.count,item.values[0].value.total,item.values[1].value.total);
+statement.run(item.key,"a","b","c","d");
 statement.finalize();
 });//db
 
