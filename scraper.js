@@ -7,17 +7,19 @@ var d3 = require("d3");
 var db = new sqlite3.Database("data.sqlite");
 var p=0; var p2=0;
 
+//db.run("DELETE FROM data");
 
+var currentCount =  "2017-01-01T00:00:00.008329+03:00"
 
-//var currentCount =  "2017-01-01T00:00:00.008329+03:00"
-
-db.each("SELECT dateModified FROM data ORDER BY dateModified DESC LIMIT 1", function(err, timeStart) {
+//db.each("SELECT dateModified FROM data ORDER BY dateModified DESC LIMIT 1", function(err, timeStart) {
       
-	var currentCount = timeStart.dateModified
+	//var currentCount = timeStart.dateModified
 	console.log("старт: "+currentCount); 
 	//var end  = formatTime(new Date());
 	//console.log("конец: "+end);
 
+//db.run("DELETE FROM data");
+	
 function piv(){  
 p++;
 client.request({url: 'https://public.api.openprocurement.org/api/2.3/plans?offset='+currentCount})
@@ -42,20 +44,11 @@ client.request({url: 'https://public.api.openprocurement.org/api/2.3/plans?offse
 
 if(data.getJSON().data.budget.year =="2017"){
 	
-	
 db.serialize(function() {
-
-  // Create new table
-  db.run("CREATE TABLE IF NOT EXISTS data (id TEXT,dateModified TEXT,nameId TEXT,name TEXT,amount INT,currency TEXT,procurementMethod TEXT,datePublished TEXT)");
-
-  
-  // Insert a new record
-  var statement = db.prepare("INSERT INTO data VALUES (?,?,?,?,?,?,?,?)");
-
-statement.run(item.id,item.dateModified,data.getJSON().data.procuringEntity.identifier.id,data.getJSON().data.procuringEntity.name,data.getJSON().data.budget.amount,data.getJSON().data.budget.currency,data.getJSON().data.tender.procurementMethod,data.getJSON().data.datePublished);
-  //else none;
-   //console.log(item.dateModified)
-  statement.finalize();
+	db.run("CREATE TABLE IF NOT EXISTS data (dateModified TEXT,name TEXT,amount INT,procurementMethod TEXT)");
+	var statement = db.prepare("INSERT INTO data VALUES (?,?,?,?)");
+	statement.run(item.dateModified,data.getJSON().data.procuringEntity.name,data.getJSON().data.budget.amount,data.getJSON().data.tender.procurementMethod);
+	statement.finalize();
 });
 
 }//year
@@ -69,7 +62,7 @@ statement.run(item.id,item.dateModified,data.getJSON().data.procuringEntity.iden
 		
 		})
 		.then(function () {	
-		if (p<10){piv ();}		
+		if (p<1){piv ();}		
 		else {
 			console.log("stop")
 				p=0;
@@ -82,71 +75,89 @@ statement.run(item.id,item.dateModified,data.getJSON().data.procuringEntity.iden
 				}
 				else {
 					
-///////////////////////////////		
+///////////////////////////////////////////////////////////////////////////////////////////////////		
 
 					
-db.run("DELETE FROM data2");					
 						
 const exporter = sqliteJSON(db);
 					
-exporter.json('SELECT name,procurementMethod FROM data', function (err, json) {
+exporter.json('SELECT name,procurementMethod,amount FROM data', function (err, json) {
 						
-						var nest=d3.nest()
-  						  .key(function(d) {return d.name;})
-						  .key(function(d) {return d.procurementMethod;})
-  						  .sortKeys(d3.ascending)
-  						  .rollup(function(v) { return {
-    							 count: v.length, 
-							total: d3.sum(v, function(d) { return d.amount; })
-  						   }; })
-  						  .entries(JSON.parse(json.replace(/limited/g, "open")));
+var nest=d3.nest()
+ .key(function(d) {return d.name;})
+.key(function(d) {return d.procurementMethod;})
+.sortKeys(d3.ascending)
+.rollup(function(v) { return {
+	count: v.length, 
+	total: d3.sum(v, function(d) { return d.amount; })
+}; })
+.entries(JSON.parse(json.replace(/limited/g, "open")));
 						
 
-
-	
 					
 nest.forEach(function(item) {
-
-//console.log(item.key+" : "+item.values.length)
 	
+//db.run("DELETE FROM data_nest2");
 	
-	db.serialize(function() {
-		db.run("CREATE TABLE IF NOT EXISTS data2 (item TEXT,keyNo TEXT,countNo INT,keyOpen TEXT,countOpen INT)");
-		var statement = db.prepare("INSERT INTO data2 VALUES (?,?,?,?,?)");
-
+db.serialize(function() {
+db.run("CREATE TABLE IF NOT EXISTS data_nest1 (item TEXT,countNo INT,countOpen INT,totalNo INT,totalOpen INT)");
+var statement = db.prepare("INSERT INTO data_nest1 VALUES (?,?,?,?,?)");
 
 if(item.values.length==2){
-	statement.run(item.key,item.values[0].key,item.values[0].value.count,item.values[1].key,item.values[1].value.count); 
+	statement.run(item.key,item.values[0].value.count,item.values[1].value.count,item.values[0].value.total,item.values[1].value.total); 
 	//console.log(2)
 }
 else {	
 	if(item.values[0].key==""){
 		//console.log("nathing")
-		statement.run(item.key,item.values[0].key,item.values[0].value.count,"no key","no data");
+		statement.run(item.key,item.values[0].value.count,0,item.values[0].value.total,0);
 	}
 	if(item.values[0].key=="open"){
 		//console.log("open")
-		statement.run(item.key,"no key","no data",item.values[0].key,item.values[0].value.count);
+		statement.run(item.key,0,item.values[0].value.count,0,item.values[0].value.total);
 	}
 }
-		
+statement.finalize();
+});//db
+
 	
-		statement.finalize();
-	});
 	
-})						
+})//nest						
+
+	
 
 						
+});//exporter		
 
-						
-						
-});		
+					
 
-///////////////////////////////
+	
+exporter.json('SELECT * FROM data_nest1', function (err, json1) {
+var nest1=d3.nest()
+ .key(function(d) {return d.item;})
+.key(function(d) {return d.procurementMethod;})
+.sortKeys(d3.ascending)
+.rollup(function(v) { return {
+	countNo: d3.sum(v, function(d) { return d.countNo; }),
+	countOpen: d3.sum(v, function(d) { return d.countOpen; }),
+	totalNo: d3.sum(v, function(d) { return d.totalNo; }),
+	totalOpen: d3.sum(v, function(d) { return d.totalOpen; })
+}; })
+.entries(JSON.parse(json1));
+	
+	console.log(JSON.stringify(nest1))
+	
+})
+				
+	
+					
+					
+					
+///////////////////////////////////////////////////////////////////////////////////////////////////
 					console.log("STOP");
 				     }
 				}, 5000);
-		}		
+		}		 
 							
 		})
 		.catch( function (error) {
@@ -161,4 +172,4 @@ else {
 
 piv ();	
  
-});
+//});
