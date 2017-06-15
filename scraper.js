@@ -125,7 +125,7 @@ statement.finalize();
 
 
 	
-	
+db.run("DELETE FROM data_nest2");	
 	
 	
 		
@@ -139,17 +139,14 @@ var nest1=d3.nest()
 	totalOpen: d3.sum(v, function(d) { return d.totalOpen; })
 }; })
 .entries(JSON.parse(json1));
-console.log(nest1[0].value.totalOpen)
-	console.log(nest1[0].value[0])
+//console.log(nest1[0].value.totalOpen)
 	
 nest1.forEach(function(item) {
-	
-//db.run("DELETE FROM data_nest2");
-	
+		
 db.serialize(function() {
 db.run("CREATE TABLE IF NOT EXISTS data_nest2 (item TEXT,countNo INT,countOpen INT,totalNo INT,totalOpen INT)");
 var statement = db.prepare("INSERT INTO data_nest2 VALUES (?,?,?,?,?)");
-statement.run(item.key,"a","b","c","d");
+statement.run(item.key,item.value.countNo,item.value.countOpen,item.value.totalNo,item.value.totalOpen);
 statement.finalize();
 });//db
 
