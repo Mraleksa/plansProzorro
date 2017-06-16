@@ -92,10 +92,10 @@ var nest=d3.nest()
 }; })
 .entries(JSON.parse(json.replace(/limited/g, "open")));
 						
-//console.log(JSON.stringify(nest[2]))
+
 					
 nest.forEach(function(item) {
-	
+console.log(JSON.stringify(item.key))	
 db.run("DELETE FROM data_nest1");
 	
 db.serialize(function() {
