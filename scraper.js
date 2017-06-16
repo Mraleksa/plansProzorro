@@ -100,7 +100,7 @@ nest.forEach(function(item) {
 	//console.log(item.values[0].value.key)
 	//console.log(item.values)
 	
-db.run("DELETE FROM data_nest1");
+//db.run("DELETE FROM data_nest1");
 	
 db.serialize(function() {
 db.run("CREATE TABLE IF NOT EXISTS data_nest1 (item TEXT,countNo INT,countOpen INT,totalNo INT,totalOpen INT)");
