@@ -98,7 +98,7 @@ nest.forEach(function(item) {
 
 	//console.log(JSON.stringify(item.values))	
 	//console.log(item.values[0].value.key)
-	//console.log(item.values[0].key)
+	console.log(item.values)
 	
 db.run("DELETE FROM data_nest1");
 	
