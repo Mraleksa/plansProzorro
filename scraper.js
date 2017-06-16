@@ -95,7 +95,7 @@ var nest=d3.nest()
 
 					
 nest.forEach(function(item) {
-console.log(JSON.stringify(item.values[0]))	
+console.log(JSON.stringify(item.values))	
 db.run("DELETE FROM data_nest1");
 	
 db.serialize(function() {
