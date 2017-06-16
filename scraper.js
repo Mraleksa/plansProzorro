@@ -96,7 +96,7 @@ var nest=d3.nest()
 					
 nest.forEach(function(item) {
 
-	console.log(JSON.parse(item.values))	
+	//console.log(JSON.stringify(item.values))	
 	//console.log(item.values)
 	
 db.run("DELETE FROM data_nest1");
@@ -109,7 +109,7 @@ if(item.values[0].value.key=="open"){
 	//statement.run(item.key,item.values[0].value.count,item.values[1].value.count,item.values[0].value.total,item.values[1].value.total); 
 	console.log("open")
 }
-else if(item.values[0].value.key==""){
+if(item.values[0].value.key==""){
 	console.log("no")
 }
 statement.finalize();
