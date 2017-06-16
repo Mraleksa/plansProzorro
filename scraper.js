@@ -105,11 +105,11 @@ db.serialize(function() {
 db.run("CREATE TABLE IF NOT EXISTS data_nest1 (item TEXT,countNo INT,countOpen INT,totalNo INT,totalOpen INT)");
 var statement = db.prepare("INSERT INTO data_nest1 VALUES (?,?,?,?,?)");
 
-if(item.values[0].value.key=="open"){
+if(JSON.stringify(item.values[0].value.key)=="open"){
 	//statement.run(item.key,item.values[0].value.count,item.values[1].value.count,item.values[0].value.total,item.values[1].value.total); 
 	console.log("open")
 }
-if(item.values[0].value.key==""){
+if(JSON.stringify(item.values[0].value.key)==""){
 	console.log("no")
 }
 statement.finalize();
