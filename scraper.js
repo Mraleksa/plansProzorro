@@ -102,19 +102,12 @@ db.serialize(function() {
 db.run("CREATE TABLE IF NOT EXISTS data_nest1 (item TEXT,countNo INT,countOpen INT,totalNo INT,totalOpen INT)");
 var statement = db.prepare("INSERT INTO data_nest1 VALUES (?,?,?,?,?)");
 
-if(item.values.length==2){
-	statement.run(item.key,item.values[0].value.count,item.values[1].value.count,item.values[0].value.total,item.values[1].value.total); 
-	//console.log(2)
+if(item.values[0].value.count==""){
+	//statement.run(item.key,item.values[0].value.count,item.values[1].value.count,item.values[0].value.total,item.values[1].value.total); 
+	console.log("no")
 }
 else {	
-	if(item.values[0].key==""){
-		//console.log("nathing")
-		statement.run(item.key,item.values[0].value.count,0,item.values[0].value.total,0);
-	}
-	if(item.values[0].key=="open"){
-		//console.log("open")
-		statement.run(item.key,0,item.values[0].value.count,0,item.values[0].value.total);
-	}
+	console.log("open")
 }
 statement.finalize();
 });//db
