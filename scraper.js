@@ -98,7 +98,7 @@ nest.forEach(function(item) {
 
 	//console.log(JSON.stringify(item.values))	
 	//console.log(item.values[0].value.key)
-	console.log(item.values[0])
+	//console.log(item.values[0].key)
 	
 db.run("DELETE FROM data_nest1");
 	
@@ -106,11 +106,11 @@ db.serialize(function() {
 db.run("CREATE TABLE IF NOT EXISTS data_nest1 (item TEXT,countNo INT,countOpen INT,totalNo INT,totalOpen INT)");
 var statement = db.prepare("INSERT INTO data_nest1 VALUES (?,?,?,?,?)");
 
-if(item.values[0].value.key=="open"){
+if(item.values[0].key=="open"){
 	//statement.run(item.key,item.values[0].value.count,item.values[1].value.count,item.values[0].value.total,item.values[1].value.total); 
 	console.log("open")
 }
-if(item.values[0].value.key==""){
+if(item.values[0].key==""){
 	console.log("no")
 }
 statement.finalize();
