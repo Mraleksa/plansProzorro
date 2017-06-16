@@ -133,6 +133,36 @@ statement.finalize();
 	
 })//nest						
 
+	
+	
+//db.run("DELETE FROM data_nest2");	
+	
+exporter.json('SELECT * FROM data_nest1', function (err, json1) {
+var nest1=d3.nest()
+ .key(function(d) {return d.item;})
+.rollup(function(v) { return {
+	countNo: d3.sum(v, function(d) { return d.countNo; }),
+	countOpen: d3.sum(v, function(d) { return d.countOpen; }),
+	totalNo: d3.sum(v, function(d) { return d.totalNo; }),
+	totalOpen: d3.sum(v, function(d) { return d.totalOpen; })
+}; })
+.entries(JSON.parse(json1));
+//console.log(nest1[0].value.totalOpen)
+	
+nest1.forEach(function(item) {
+		
+db.serialize(function() {
+db.run("CREATE TABLE IF NOT EXISTS data_nest2 (item TEXT,countNo INT,countOpen INT,totalNo INT,totalOpen INT)");
+var statement = db.prepare("INSERT INTO data_nest2 VALUES (?,?,?,?,?)");
+statement.run(item.key,item.value.countNo,item.value.countOpen,item.value.totalNo,item.value.totalOpen);
+statement.finalize();
+});//db
+})//nest			
+})//exporter2	
+	
+	
+	
+	
 });//exporter		
 
 					
