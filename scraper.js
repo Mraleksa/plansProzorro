@@ -98,7 +98,7 @@ nest.forEach(function(item) {
 
 	//console.log(JSON.stringify(item.values))	
 	//console.log(item.values[0].value.key)
-	console.log(item.values)
+	//console.log(item.values)
 	
 db.run("DELETE FROM data_nest1");
 	
@@ -109,11 +109,11 @@ var statement = db.prepare("INSERT INTO data_nest1 VALUES (?,?,?,?,?)");
 if(item.values.length==2){
 	if(item.values[0].key==""){
 	statement.run(item.key,item.values[0].value.count,item.values[0].value.total,item.values[1].value.count,item.values[1].value.total); 
-	console.log("open")
+	
 	}
 	if(item.values[0].key=="open"){
 	statement.run(item.key,item.values[1].value.count,item.values[1].value.total,item.values[0].value.count,item.values[0].value.total);
-	console.log("no")
+	
 	}
 	
 }
