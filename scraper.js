@@ -7,7 +7,7 @@ var d3 = require("d3");
 var db = new sqlite3.Database("data.sqlite");
 var p=0; var p2=0;
 
-db.run("DELETE FROM data");
+//db.run("DELETE FROM data");
 
 var currentCount =  "2017-01-01T00:00:00.008329+03:00"
 
@@ -125,21 +125,7 @@ statement.finalize();
 
 
 	
-
-	
-	
-	
-	
-	
-	
-	
-});//exporter		
-
-					
-
-	
-
-
+/*
 db.run("DELETE FROM data_nest2");	
 	
 exporter.json('SELECT * FROM data_nest1', function (err, json1) {
@@ -162,12 +148,22 @@ var statement = db.prepare("INSERT INTO data_nest2 VALUES (?,?,?,?,?)");
 statement.run(item.key,item.value.countNo,item.value.countOpen,item.value.totalNo,item.value.totalOpen);
 statement.finalize();
 });//db
+})//nest			
+})//exporter2		
+	
+*/	
+	
+	
+	
+	
+});//exporter		
+
+					
 
 	
-	
-})//nest		
-	
-})//exporter2				
+
+
+			
 	
 					
 					
