@@ -92,7 +92,7 @@ var nest=d3.nest()
 }; })
 .entries(JSON.parse(json.replace(/limited/g, "open")));
 						
-console.log(JSON.stringify(nest[2]))
+//console.log(JSON.stringify(nest[2]))
 					
 nest.forEach(function(item) {
 	
