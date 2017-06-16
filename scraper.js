@@ -106,7 +106,7 @@ if(item.values[0].value.key=="open"){
 	//statement.run(item.key,item.values[0].value.count,item.values[1].value.count,item.values[0].value.total,item.values[1].value.total); 
 	console.log("open")
 }
-else {	
+else if(item.values[0].value.key==""){
 	console.log("no")
 }
 statement.finalize();
