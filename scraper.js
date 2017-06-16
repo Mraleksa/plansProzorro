@@ -126,7 +126,7 @@ statement.finalize();
 
 	
 
-//db.run("DELETE FROM data_nest2");	
+db.run("DELETE FROM data_nest2");	
 	
 exporter.json('SELECT * FROM data_nest1', function (err, json1) {
 var nest1=d3.nest()
