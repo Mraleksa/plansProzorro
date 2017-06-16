@@ -9,11 +9,11 @@ var p=0; var p2=0;
 
 db.run("DELETE FROM data");
 
-var currentCount =  "2017-01-01T00:00:00.008329+03:00"
+//var currentCount =  "2017-01-01T00:00:00.008329+03:00"
 
-//db.each("SELECT dateModified FROM data ORDER BY dateModified DESC LIMIT 1", function(err, timeStart) {
+db.each("SELECT dateModified FROM data ORDER BY dateModified DESC LIMIT 1", function(err, timeStart) {
       
-	//var currentCount = timeStart.dateModified
+	var currentCount = timeStart.dateModified
 	console.log("старт: "+currentCount); 
 	//var end  = formatTime(new Date());
 	//console.log("конец: "+end);
@@ -62,7 +62,7 @@ db.serialize(function() {
 		
 		})
 		.then(function () {	
-		if (p<1){piv ();}		
+		if (p<10){piv ();}		
 		else {
 			console.log("stop")
 				p=0;
@@ -70,7 +70,7 @@ db.serialize(function() {
 				console.log(p2)
 			setTimeout(function() {
 			
-				if (p2 < 1) {
+				if (p2 < 10) {
 					piv ();
 				}
 				else {
@@ -100,7 +100,7 @@ nest.forEach(function(item) {
 	//console.log(item.values[0].value.key)
 	//console.log(item.values)
 	
-db.run("DELETE FROM data_nest1");
+//db.run("DELETE FROM data_nest1");
 	
 db.serialize(function() {
 db.run("CREATE TABLE IF NOT EXISTS data_nest1 (item TEXT,countNo INT,countOpen INT,totalNo INT,totalOpen INT)");
@@ -186,4 +186,4 @@ statement.finalize();
 
 piv ();	
  
-//});
+});
